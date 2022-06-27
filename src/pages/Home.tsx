@@ -6,17 +6,47 @@ import '../styles/auth.scss'
 
 import { Button } from './../components/Button';
 import { useAuthContext } from './../hooks/AuthContext';
+import { FormEvent, useState } from "react";
+import { firebaseCommands } from './../service/firebase';
 
 
 export function Home() {
   const { user, signInWithGoogle } = useAuthContext();
+  const [roomCode, setRoomCode] = useState('');
+
   const navigatePage = useNavigate();
+
   async function handleCreateRoom() {
     if (!user) {
       await signInWithGoogle();
     }
 
     navigatePage({ pathname: './rooms/new' });
+  }
+
+
+  async function handleJoinRoom(event: FormEvent) {
+    event.preventDefault();
+
+    if (roomCode.trim() === '') return;
+    const connectionDatabase = await firebaseCommands.database.getDatabase();
+    const roomRef = await firebaseCommands.database.ref(connectionDatabase);
+
+    await firebaseCommands.database.get(
+      firebaseCommands.database.child(roomRef, `rooms/${roomCode}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          navigatePage({ pathname: `rooms/${roomCode}` });
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+
+
+
+
   }
 
   return (
@@ -40,9 +70,11 @@ export function Home() {
             Crie sua sala com Google
           </button>
           <div className="separator">ou entre em uma sala </div>
-          <form>
+          <form onSubmit={handleJoinRoom}>
             <input
               type="text"
+              onChange={event => setRoomCode(event.target.value)}
+              value={roomCode}
               placeholder="Digite o código da sala"
             />
             <Button type='submit'>Entrar na sala</Button>

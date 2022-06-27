@@ -14,6 +14,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
+
 export const firebaseCommands = {
   firebaseInit: () => {
     initializeApp(firebaseConfig);

@@ -27,7 +27,6 @@ export function AuthContentProvider({ children }: AuthContextProviderProps) {
     useEffect(() => {
         firebaseCommands.firebaseInit();
         const auth = firebaseCommands.auth.getAuth();
-
         const unsubscribe = firebaseCommands.auth.onAuthStateChanged(auth, user => {
             if (user) {
                 const { displayName, photoURL, uid } = user;
