@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { firebaseCommands } from "../service/firebase";
 
 interface User {
@@ -22,7 +23,7 @@ type AuthContextProviderProps = {
 export function AuthContentProvider({ children }: AuthContextProviderProps) {
 
 
-
+    const navigatePage = useNavigate();
     const [user, setUser] = useState<User>();
     useEffect(() => {
         firebaseCommands.firebaseInit();
@@ -39,6 +40,7 @@ export function AuthContentProvider({ children }: AuthContextProviderProps) {
                     name: displayName,
                     avatar: photoURL
                 });
+                navigatePage({pathname:'/rooms/new'});
             }
         });
         return () => unsubscribe();

@@ -60,7 +60,7 @@ export function useRoom(roomId: string | undefined) {
 
 
             });
-            setTtitle(databaseRoom.title)
+            setTtitle(databaseRoom.title);
             setQuestions(parsedQuestion);
         })
         // return firebaseCommands.database.off(roomRef);
