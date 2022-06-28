@@ -29,12 +29,18 @@ export function Home() {
     event.preventDefault();
 
     if (roomCode.trim() === '') return;
+
+
     const connectionDatabase = await firebaseCommands.database.getDatabase();
     const roomRef = await firebaseCommands.database.ref(connectionDatabase);
 
-    await firebaseCommands.database.get(
+    await  firebaseCommands.database.get(
       firebaseCommands.database.child(roomRef, `rooms/${roomCode}`))
       .then((snapshot) => {
+        if(snapshot.val().endedAt){
+          alert("essa sala foi  excluida");
+          return;
+        }
         if (snapshot.exists()) {
           navigatePage({ pathname: `rooms/${roomCode}` });
         } else {

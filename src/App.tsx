@@ -6,6 +6,7 @@ import { Room } from './pages/Room';
 
 import { AuthContentProvider } from "./hooks/AuthContext";
 import { firebaseCommands } from './service/firebase';
+import { AdminRoom } from './pages/AdminRoom';
 function App() {
   firebaseCommands.firebaseInit();
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/rooms/new" element={<NewRoom />} />
           <Route path="/rooms/:id"  element={<Room />} />
+          <Route path="/admin/rooms/:id"  element={<AdminRoom />} />
 
         </Routes>
 
