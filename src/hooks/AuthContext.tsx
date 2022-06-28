@@ -40,7 +40,7 @@ export function AuthContentProvider({ children }: AuthContextProviderProps) {
                     name: displayName,
                     avatar: photoURL
                 });
-                navigatePage({pathname:'/rooms/new'});
+                // navigatePage({pathname:'/rooms/new'});
             }
         });
         return () => unsubscribe();
