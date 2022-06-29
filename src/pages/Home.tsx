@@ -8,6 +8,7 @@ import { Button } from './../components/Button';
 import { useAuthContext } from './../hooks/AuthContext';
 import { FormEvent, useState } from "react";
 import { firebaseCommands } from './../service/firebase';
+import toast, { Toaster } from "react-hot-toast";
 
 
 export function Home() {
@@ -33,18 +34,27 @@ export function Home() {
 
     const connectionDatabase = await firebaseCommands.database.getDatabase();
     const roomRef = await firebaseCommands.database.ref(connectionDatabase);
-
-    await  firebaseCommands.database.get(
+    const stylesToast = {
+      borderRadius: '10px',
+      background: '#fff',
+      color: '#835afd',
+    }
+    await firebaseCommands.database.get(
       firebaseCommands.database.child(roomRef, `rooms/${roomCode}`))
       .then((snapshot) => {
-        if(snapshot.val().endedAt){
-          alert("essa sala foi  excluida");
+
+        if (snapshot.val() && snapshot.val().endedAt) {
+          toast.error("essa sala foi excluida", {
+            style: stylesToast
+          });
           return;
         }
         if (snapshot.exists()) {
           navigatePage({ pathname: `rooms/${roomCode}` });
         } else {
-          console.log("No data available");
+          toast.error("Sala não Encotrada", {
+            style: stylesToast
+          })
         }
       }).catch((error) => {
         console.error(error);
@@ -57,6 +67,10 @@ export function Home() {
 
   return (
     <div id="page-auth">
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
       <aside>
         <img
           src={illustrationImg}

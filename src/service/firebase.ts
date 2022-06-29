@@ -22,3 +22,7 @@ export const firebaseCommands = {
   auth,
   database
 };
+
+function findData(urlSearcher: string){
+  
+}

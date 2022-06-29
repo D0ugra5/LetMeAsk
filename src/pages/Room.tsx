@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 
 import logoImg from '../assets/images/logo.svg';
@@ -37,10 +37,10 @@ type Question = {
     isHighLighted: boolean,
 }
 export function Room() {
-    const { user } = useAuthContext();
+    const { user, signInWithGoogle } = useAuthContext();
     const params = useParams<RoomParams>();
     const [newQuestion, setNewQuestion] = useState('');
-
+    const navigatePage = useNavigate();
     const { questions, title } = useRoom(params.id);
 
     async function handleSendQuestion(event: FormEvent) {
@@ -76,7 +76,7 @@ export function Room() {
     async function handleLikeQuestion(questionId: string, likeId: string | undefined) {
 
         if (!likeId) {
-           
+
             const roomref = await firebaseCommands.database.
                 ref(firebaseCommands.database.getDatabase(), `rooms/${params.id}/questions/${questionId}/likes`)
             firebaseCommands.database.push(roomref, {
@@ -95,7 +95,9 @@ export function Room() {
         <div id="page-room">
             <header>
                 <div className='content'>
-                    <img src={logoImg} alt="Letmeask" />
+                    <Link to="/">
+                        <img className='logo-img' src={logoImg} alt="Letmeask" />
+                    </Link>
                     <RoomCode code={params.id} />
                 </div>
             </header>
@@ -117,12 +119,16 @@ export function Room() {
 
                         {user ? (
                             <div className='user-info'>
-                                <img src={user.avatar}  referrerPolicy="no-referrer" alt={user.name}   />
+                                <img src={user.avatar} referrerPolicy="no-referrer" alt={user.name} />
                                 <span>{user.name}</span>
                             </div>
 
                         ) : (
-                            <span>Para enviar uma pergunta, <button>faça seu login</button>.</span>
+                            <span>Para enviar uma pergunta,
+                                <button
+                                    type='submit'
+                                    onClick={() => signInWithGoogle() }
+                                >faça seu login</button>.</span>
                         )}
                         <Button type="submit">Enviar Pergunta</Button>
                     </div>

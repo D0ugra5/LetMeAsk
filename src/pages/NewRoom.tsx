@@ -27,7 +27,7 @@ export function NewRoom() {
                 title: newRoom,
                 authorId: user?.id,
             })
-            navigatePage({ pathname: `/rooms/${firebaseSave.key}` });
+            navigatePage({ pathname: `/admin/rooms/${firebaseSave.key}` });
         } catch (error) {
             console.log(error)
         }
