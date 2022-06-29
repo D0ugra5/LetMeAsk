@@ -54,7 +54,7 @@ export function Home() {
         } else {
           toast.error("Sala não Encotrada", {
             style: stylesToast
-          })
+          });
         }
       }).catch((error) => {
         console.error(error);
@@ -92,6 +92,7 @@ export function Home() {
           <div className="separator">ou entre em uma sala </div>
           <form onSubmit={handleJoinRoom}>
             <input
+              required
               type="text"
               onChange={event => setRoomCode(event.target.value)}
               value={roomCode}
